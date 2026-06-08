@@ -1,0 +1,26 @@
+---
+description: p5.js sandbox execution and export frame capture
+globs: components/P5Canvas.tsx,utils/exportService.ts
+alwaysApply: false
+---
+
+# p5 sandbox & export
+
+## P5Canvas
+
+- User/AI code runs via `new Function('p', cleanCode)` — treat as untrusted
+- Strip markdown fences from AI output before eval
+- Default fallback `p.setup` if AI omits it; wrap `p.draw` for runtime errors → `RUNTIME_ERR` on canvas, `noLoop()`
+- Canvas 400×400; CSS `scale()` via ResizeObserver (max ~2x)
+- `P5CanvasRef`: `downloadGif`, `downloadPng(filename, size?)` for cursor sizes
+
+## exportService
+
+- `generateExportPack({ code, platform, filename })` — platforms: `windows` | `linux` | `chrome`
+- Ghost p5 instance; mock `p.millis()` for frame sequence; JSZip + file-saver
+- **Not called from App UI yet** — wiring belongs in App/Terminal with `exportState` progress
+
+## Safety
+
+- No external p5 libraries in generated code
+- Prefer fixing sanitization over disabling sandbox for demos

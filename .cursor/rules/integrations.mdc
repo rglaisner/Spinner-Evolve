@@ -1,0 +1,33 @@
+---
+description: Embedding Spinner Evolve outputs in other apps and monorepos
+globs: README.md,packages/**/*
+alwaysApply: false
+---
+
+# Integrations
+
+## Export outputs (this repo)
+
+| Platform | Output | Consumer |
+|----------|--------|----------|
+| windows | PNG frame sequence + instructions | RealWorld Cursor Editor → `.ani` |
+| linux | Plymouth theme ZIP | `/usr/share/plymouth/themes/` |
+| chrome | MV3 extension folder | `chrome://extensions` load unpacked |
+
+PNG/GIF also via `P5CanvasRef` at 32×32 / 48×48 for Next.js `loading.tsx` or design systems.
+
+## Package extract (future)
+
+- Target: `packages/core` with `generateNextSpinner`, types, prompt templates
+- Consumer repos: Next.js, Storybook, CI — must not bundle `GEMINI_API_KEY` into client unless intended
+
+## Supabase gallery (future)
+
+- Table: mutations with `p5_code`, lineage metadata, RLS
+- Keep offline/localStorage path for zero-backend use
+
+## Agent workflow
+
+- Use **integrations** skill path in AGENTS.md task router
+- MCP Supabase for schema; Vercel MCP for deploy
+- Document consumer setup in README, not inside `geminiService` prompts

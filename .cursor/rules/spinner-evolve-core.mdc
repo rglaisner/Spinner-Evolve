@@ -1,0 +1,38 @@
+---
+description: Spinner Evolve core stack, state machine, and coding standards
+alwaysApply: true
+---
+
+# Spinner Evolve — core
+
+## Stack
+
+- Vite 6 + React 19 + TypeScript (strict; **no `any`** — use `unknown` + guards)
+- p5.js via **CDN** in `index.html` (`window.p5`), not npm
+- Gemini via `@google/genai` in `services/geminiService.ts` (`gemini-3-flash-preview`)
+- Env: `GEMINI_API_KEY` in `.env.local` → `process.env.API_KEY` in app (`vite.config.ts`)
+- Dev server port **3000**
+- Preserve SPDX `Apache-2.0` headers on touched files
+
+## State machine (App.tsx)
+
+- `history: SpinnerData[]` — committed generations; progenitor is index 0
+- **Phantom slot:** `currentIndex === history.length` while A/B candidates exist
+- **Selection mode:** `candidates !== null && currentIndex === history.length`
+- Dual parallel calls to `generateNextSpinner(seedCode, nextId, onStreamUpdate)`
+- Winner appended to history; next evolve uses winner `p5Code`
+
+## AI output contract
+
+Each generation returns JSON: `mutationName`, `reasoning`, `p5Code` (p5 instance-mode body only — `p.setup` / `p.draw`, no `new p5()`).
+
+## Do not
+
+- Commit `.env.local` or API keys
+- Add npm `p5` without a deliberate migration plan
+- Break dual-stream or selection flow without updating Terminal + mobile tabs
+- Claim export works in UI until `generateExportPack` / canvas refs are wired
+
+## Before finishing
+
+Run `npm run build`. For behavior changes, smoke `npm run dev` with a valid API key.

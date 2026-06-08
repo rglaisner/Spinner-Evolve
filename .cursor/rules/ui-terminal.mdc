@@ -1,0 +1,35 @@
+---
+description: Dark terminal UI, streaming overlay, and mobile A/B patterns
+globs: App.tsx,components/Terminal.tsx,components/StatsChart.tsx
+alwaysApply: false
+---
+
+# UI & terminal
+
+## Aesthetic
+
+- Near-black backgrounds (`#020202`, `#080808`), neutral borders, mono metrics
+- Variant A: blue accents; Variant B: purple
+- Match existing patterns; avoid generic “AI dashboard” redesigns
+
+## App.tsx
+
+- Landing overlay until `hasStarted`; then header nav + canvas + terminal
+- `StreamingOverlay` uses `parsePartialJson` during generation
+- Mobile: `mobileTab` + swipe between A/B; desktop: split view
+- Keyboard: Enter/Space on focused variant to select
+- `exportState` blocks interaction when set — use for export progress UI
+
+## Terminal.tsx
+
+- `parsePartialJson` for streaming fields; cache last valid `p5Code` to avoid flash
+- `TerminalPanel`: metrics (time, TPS, tokens), Recharts `StatsChart`, code overlay
+- JS download per variant when `data.p5Code` exists
+
+## StatsChart
+
+- Recharts only when container has non-zero size (ResizeObserver guard)
+
+## UX copy
+
+- “SELECT ON CANVAS” in selection mode; “EVOLVE” disabled during selection/generation

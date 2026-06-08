@@ -1,0 +1,31 @@
+---
+description: Gemini structured streaming and schema for spinner mutations
+globs: services/**/*,types.ts
+alwaysApply: false
+---
+
+# Gemini streaming
+
+## File
+
+`services/geminiService.ts` — `generateNextSpinner(previousCode, previousId, onStreamUpdate)`.
+
+## Contract
+
+- Model: `gemini-3-flash-preview`
+- `responseMimeType: application/json` with `responseSchema` (`mutationName`, `reasoning`, `p5Code`)
+- Stream chunks → `onStreamUpdate(fullText)` for partial JSON UI
+- Return `SpinnerData` with timing/token estimates
+
+## Prompt constraints (do not remove without product sign-off)
+
+- p5 instance `p`, 400×400 canvas, `p.clear()` (transparent, no `p.background()`)
+- Seamless infinite motion (`p.millis()` / sine; avoid hard loop resets)
+- Thick strokes for 32×32 cursor legibility
+- Evolution: ~80% lineage / ~20% mutation when `previousCode` is set
+
+## Changes
+
+- Consult **gemini-js-genai** skill before API shape changes
+- Keep `App.tsx` dual `Promise.all` streams working
+- Typed errors: `catch (error: unknown)`, narrow with `instanceof Error`
